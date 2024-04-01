@@ -7,7 +7,7 @@ export const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    loadTasks(state, action: PayloadAction<Task[]>) {
+    loadTasks(_, action: PayloadAction<Task[]>) {
       return action.payload;
     },
     addTask: {
@@ -21,11 +21,13 @@ export const tasksSlice = createSlice({
       },
     },
     toggleTask(state, action: PayloadAction<string>) {
-      const task = state.find((task) => task.id === action.payload);
-      if (task) {
-        task.completed = !task.completed;
-      }
+      return state.map((task) =>
+        task.id === action.payload
+          ? { ...task, completed: !task.completed }
+          : task
+      );
     },
+
     deleteTask(state, action: PayloadAction<string>) {
       return state.filter((task) => task.id !== action.payload);
     },
